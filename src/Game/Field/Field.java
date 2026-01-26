@@ -7,12 +7,11 @@ import Game.Cell.NumberedCell;
 import Game.Position;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class Field { // O campo será sempre um quadrado
-    private Cell[][] cells;
     private Random random = new Random();
-    private GameState gameState = GameState.Playing;
+    public Cell[][] cells;
+    public GameState gameState = GameState.Playing;
 
     public Field(int side) {
         cells = new Cell[side][side];
@@ -21,7 +20,6 @@ public class Field { // O campo será sempre um quadrado
     public void generateField(int bombsQuantity) {
         generateEmptyField();
         randomizeBombs(bombsQuantity);
-        System.out.println("Campo criado!");
     }
 
     public void revealCell(Position pos) {
@@ -62,7 +60,6 @@ public class Field { // O campo será sempre um quadrado
                 if (cells[i][j] instanceof MineCell) cells[i][j].Reveal();
             }
         }
-        System.out.println("Você perdeu!");
         gameState = GameState.GameOver;
     }
 
@@ -102,22 +99,6 @@ public class Field { // O campo será sempre um quadrado
                 var pos = new Position(i, j);
                 cells[i][j] = new NumberedCell(pos);
             }
-        }
-    }
-
-    public void showFieldOnConsole() {
-        System.out.print("   ");
-        for (int j = 0; j < cells[0].length; j++) {
-            System.out.print("  " + (j + 1));
-        }
-
-        System.out.println();
-        for (int i = 0; i < cells.length; i++) {
-            System.out.print((i + 1) + " - ");
-            for (int j = 0; j < cells[i].length; j++) {
-                System.out.print(cells[i][j]);
-            }
-            System.out.println();
         }
     }
 }

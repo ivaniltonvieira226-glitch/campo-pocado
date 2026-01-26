@@ -8,9 +8,8 @@ public class Main {
         var field = new Field(8);
         field.generateField(8);
 
-        var pos = new Position(5, 5);
-        field.revealCell(pos);
-        field.showFieldOnConsole();
+        var console = new GameConsoleUI(field);
+        console.run();
 
 //        frame.setSize(400, 400);
 //        frame.setResizable(false);
