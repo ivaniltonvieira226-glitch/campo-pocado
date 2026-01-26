@@ -44,6 +44,7 @@ public class GameConsoleUI {
     public void showFieldOnConsole() {
         var cells = field.cells;
 
+        // Mostrar campo
         System.out.print("   ");
         for (int j = 0; j < cells[0].length; j++) {
             System.out.print("  " + (j + 1));
@@ -57,5 +58,8 @@ public class GameConsoleUI {
             }
             System.out.println();
         }
+
+        // Mostrar info
+        System.out.println("Bandeiras restantes: " + field.remainingFlags);
     }
 }
