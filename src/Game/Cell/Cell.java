@@ -5,7 +5,7 @@ import Game.Position;
 
 public abstract class Cell extends GameEntity {
     private CellState state = CellState.Hidden;
-    protected String symbol;
+    public String symbol;
 
     public Cell(Position pos) {
         super(pos);
