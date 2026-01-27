@@ -35,14 +35,19 @@ public class Field { // O campo será sempre um quadrado
 
     public void revealCell(Position pos) {
         var cell = cells[pos.x][pos.y];
+        var cellState = cell.getState();
 
         if (cell instanceof MineCell) {
             loose();
             return;
         }
 
-        if (cell.getState() == CellState.Revealed)
+        if (cellState == CellState.Revealed)
             return;
+
+        if (cellState == CellState.Flagged) {
+            remainingFlags++;
+        }
 
         cell.Reveal();
         _remainingNumCells--;
@@ -66,7 +71,18 @@ public class Field { // O campo será sempre um quadrado
 
     public void flagCell(Position pos) {
         var cell = cells[pos.x][pos.y];
-        if (remainingFlags <= 0 || cell.getState() == CellState.Flagged) return;
+        var cellState = cell.getState();
+
+        // Se já estiver com bandeira, remova
+        if (cellState == CellState.Flagged) {
+            cell.UnFlag();
+            remainingFlags++;
+            return;
+        }
+
+        // Se não tiver mais bandeira ou já foi revelada, não faça nada.
+        if (remainingFlags <= 0 || cellState == CellState.Revealed) return;
+
         cell.Flag();
         remainingFlags--;
     }

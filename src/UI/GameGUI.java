@@ -14,8 +14,8 @@ import java.awt.event.MouseEvent;
 public class GameGUI extends JFrame {
     private final int rows;
     private final int cols;
-    private JButton[][] buttons;
-    private Field field; // Your logical board
+    private final JButton[][] buttons;
+    private final Field field; // Your logical board
 
     public GameGUI(int side, int mines) {
         this.rows = side;
@@ -27,7 +27,7 @@ public class GameGUI extends JFrame {
     }
 
     private void initializeUI() {
-        setTitle("Minesweeper POO");
+        setTitle("Campo POCADO");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(rows, cols));
 
@@ -46,7 +46,7 @@ public class GameGUI extends JFrame {
                         if (SwingUtilities.isLeftMouseButton(e)) {
                             handleLeftClick(r, c);
                         } else if (SwingUtilities.isRightMouseButton(e)) {
-//                            handleRightClick(r, c);
+                            handleRightClick(r, c);
                         }
                     }
                 });
@@ -67,16 +67,30 @@ public class GameGUI extends JFrame {
 
             if (field.gameState == GameState.GameOver) {
                 JOptionPane.showMessageDialog(this, "Boom! Game Over.");
+            } else if (field.gameState == GameState.Win) {
+                JOptionPane.showMessageDialog(this, "Parabéns, você venceu!");
             }
+    }
+
+    private void handleRightClick(int x, int y) {
+        var pos = new Position(x, y);
+        field.flagCell(pos);
+        updateBoardUI();
     }
 
     private void updateBoardUI() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                Cell cell = field.cells[i][j];
-                if (cell.getState() == CellState.Revealed) {
+                var cell = field.cells[i][j];
+                var cellState = cell.getState();
+
+                if (cellState == CellState.Revealed) {
                     buttons[i][j].setEnabled(false);
                     buttons[i][j].setText(cell.symbol);
+                } else if (cellState == CellState.Flagged) {
+                    buttons[i][j].setText("🚩");
+                } else {
+                    buttons[i][j].setText("");
                 }
             }
         }

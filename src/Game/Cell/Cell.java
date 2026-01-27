@@ -20,8 +20,14 @@ public abstract class Cell extends GameEntity {
     }
 
     public boolean Flag() {
-        setState(CellState.Flagged);
+        // Se já foi revelada, não faça nada
+        if (getState() == CellState.Revealed) return false;
+        else if (getState() == CellState.Hidden) setState(CellState.Flagged);
         return false;
+    }
+
+    public void UnFlag() {
+        if (getState() == CellState.Flagged) setState(CellState.Hidden);
     }
 
     public abstract boolean Reveal();
