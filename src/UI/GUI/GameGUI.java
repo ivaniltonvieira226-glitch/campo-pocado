@@ -1,4 +1,4 @@
-package UI;
+package UI.GUI;
 
 import Game.Cell.CellState;
 import Game.Field.Field;
@@ -90,11 +90,11 @@ public class GameGUI extends JFrame {
             updateBoardUI();
 
             if (field.gameState == GameState.GameOver) {
+                timer.stop();
                 JOptionPane.showMessageDialog(this, "Boom! Game Over.");
-                timer.stop();
             } else if (field.gameState == GameState.Win) {
-                JOptionPane.showMessageDialog(this, "Parabéns, você venceu!");
                 timer.stop();
+                JOptionPane.showMessageDialog(this, "Parabéns, você venceu!");
             }
     }
 

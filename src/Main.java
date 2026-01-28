@@ -1,7 +1,7 @@
-import UI.GameGUI;
+import UI.GUI.MenuGUI;
 
 public class Main {
     static void main() {
-        var gui = new GameGUI(8, 8);
+        var gui = new MenuGUI();
     }
 }
