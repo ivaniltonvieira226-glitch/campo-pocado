@@ -58,6 +58,7 @@ public class GameGUI extends JFrame {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (timer == null) startTimer();
+                        if (field.gameState == GameState.GameOver) return;
 
                         if (SwingUtilities.isLeftMouseButton(e)) {
                             handleLeftClick(r, c);
@@ -89,19 +90,39 @@ public class GameGUI extends JFrame {
             field.revealCell(pos);
             updateBoardUI();
 
-            if (field.gameState == GameState.GameOver) {
-                timer.stop();
-                JOptionPane.showMessageDialog(this, "Boom! Game Over.");
-            } else if (field.gameState == GameState.Win) {
-                timer.stop();
-                JOptionPane.showMessageDialog(this, "Parabéns, você venceu!");
-            }
+            if (field.gameState == GameState.GameOver) gameOver();
+            else if (field.gameState == GameState.Win) win();
     }
 
     private void handleRightClick(int x, int y) {
         var pos = new Position(x, y);
         field.flagCell(pos);
         updateBoardUI();
+    }
+
+    private void gameOver() {
+        timer.stop();
+        playAgainPanel("Boom! Game Over.");
+    }
+
+    private void win() {
+        timer.stop();
+        playAgainPanel("Parabéns, você venceu!");
+    }
+
+    private void playAgainPanel(String message) {
+        Object[] options = {"Jogar de novo", "Sair"};
+        var response = JOptionPane.showOptionDialog(null, message, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+
+        switch (response) {
+            case 1:
+                this.dispose();
+                break;
+            case 0:
+                this.dispose();
+                new MenuGUI();
+                break;
+        }
     }
 
     private void updateBoardUI() {
