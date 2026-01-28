@@ -63,4 +63,9 @@ public class MenuGUI extends JFrame {
 
         return button;
     }
+
+    public static void main(String[] args) {
+        // Main entry point of your application
+        SwingUtilities.invokeLater(MenuGUI::new);
+    }
 }
