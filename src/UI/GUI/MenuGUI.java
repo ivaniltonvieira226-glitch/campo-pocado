@@ -1,5 +1,7 @@
 package UI.GUI;
 
+import UI.GUI.Exceptions.InvalidDifficultyException;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -35,12 +37,15 @@ public class MenuGUI extends JFrame {
         JButton easyBtn = createDifficultyButton("Fácil (9x9, 10 Mines)", 9, 10);
         JButton mediumBtn = createDifficultyButton("Médio (16x16, 40 Mines)", 16, 40);
         JButton hardBtn = createDifficultyButton("Difícil (30x30, 99 Mines)", 30, 99);
+        JButton customBtn = createCustomDifficultyButton("Customizada");
 
         buttonPanel.add(easyBtn);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         buttonPanel.add(mediumBtn);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         buttonPanel.add(hardBtn);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        buttonPanel.add(customBtn);
 
         add(buttonPanel, BorderLayout.CENTER);
 
@@ -62,6 +67,57 @@ public class MenuGUI extends JFrame {
         });
 
         return button;
+    }
+
+    private JButton createCustomDifficultyButton(String label) {
+        JButton button = new JButton(label);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        button.addActionListener(e -> {
+            showCustomDifficultyDialog();
+        });
+
+        return button;
+    }
+
+    private void showCustomDifficultyDialog() {
+        JTextField sideField = new JTextField(5);
+        JTextField minesField = new JTextField(5);
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new GridLayout(2, 2, 5, 5));
+        myPanel.add(new JLabel("Tamanho do campo (n x n):"));
+        myPanel.add(sideField);
+        myPanel.add(new JLabel("Número de minas:"));
+        myPanel.add(minesField);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Dificuldade customizada", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int side = Integer.parseInt(sideField.getText());
+                int mines = Integer.parseInt(minesField.getText());
+
+                // 4. Validate and start the game
+                validateDifficulty(side, mines); // Method that throws your Exception
+
+                new GameGUI(side, mines);
+                this.dispose(); // Close menu
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Coloque números inteiros!", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (InvalidDifficultyException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Configurações inválidas!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    private void validateDifficulty(int side, int mines) throws InvalidDifficultyException {
+        if (side < 2) throw new InvalidDifficultyException("Campo muito pequeno!");
+        if (side > 50) throw new InvalidDifficultyException("Campo muito grande!");
+        if (mines < 1)  throw new InvalidDifficultyException("Quantidade de minas menor que 1!");
+        if (mines > (side * side))  throw new InvalidDifficultyException("Quantidade de minas muito grande!");
     }
 
     public static void main(String[] args) {
