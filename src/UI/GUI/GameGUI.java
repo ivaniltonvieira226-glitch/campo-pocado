@@ -1,8 +1,6 @@
 package UI.GUI;
 
-import Game.Cell.Cell;
 import Game.Cell.CellState;
-import Game.Cell.MineCell;
 import Game.Field.Field;
 import Game.Field.GameState;
 import Game.Position;
@@ -20,7 +18,7 @@ public class GameGUI extends JFrame {
     private final JButton[][] buttons;
     private final JLabel labelFlags = new JLabel("Bandeiras: 0");
     private final JLabel labelTimer = new JLabel("Tempo: 0s");
-    private final JButton buttonGiveUp = new JButton("😖");
+    private final JButton buttonGiveUp = new JButton("😁");
     private Timer timer;
     private int secondsPassed;
 
@@ -29,6 +27,7 @@ public class GameGUI extends JFrame {
         this.cols = side;
         this.field = new Field(side, mines);
         this.buttons = new JButton[side][side];
+        this.buttonGiveUp.setFont(new Font("Arial", Font.PLAIN, 25));;
 
         initializeUI();
     }
@@ -44,6 +43,7 @@ public class GameGUI extends JFrame {
         labelFlags.setText("Bandeiras: " + field.remainingFlags);
 
         infoPanel.add(labelFlags);
+        infoPanel.add(buttonGiveUp);
         infoPanel.add(labelTimer);
         add(infoPanel, BorderLayout.NORTH);
 
@@ -78,6 +78,23 @@ public class GameGUI extends JFrame {
         }
         add(gridPanel, BorderLayout.CENTER);
 
+        // Lógica de desistência
+        buttonGiveUp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                startTimer();
+                gameOver();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonGiveUp.setText("😖");
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buttonGiveUp.setText("😁");
+            }
+        });
+
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -108,7 +125,7 @@ public class GameGUI extends JFrame {
 
     private void gameOver() {
         timer.stop();
-        playAgainPanel("Boom! Game Over.");
+        playAgainPanel("Você perdeu, avexado!");
     }
 
     private void win() {
